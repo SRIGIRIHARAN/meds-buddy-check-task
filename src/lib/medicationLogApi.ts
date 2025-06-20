@@ -30,7 +30,7 @@ export async function markMedicationAsTaken({
         medication_id,
         date,
         taken: true,
-        proof_photo_url,
+        proof_photo_url: proof_photo_url || null,
       },
     ], { onConflict: "user_id,medication_id,date" });
 }

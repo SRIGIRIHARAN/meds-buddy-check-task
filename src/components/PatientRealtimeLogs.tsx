@@ -4,6 +4,7 @@ import { fetchMedicationLogsForMonth } from "@/lib/medicationLogApi";
 import { useMedicationLogSubscription } from "@/lib/useMedicationLogSubscription";
 import { MedicationLog } from "@/types/medicationLog";
 import { format } from "date-fns";
+import { supabase } from "@/lib/supabaseClient";
 
 interface Props {
   patientId: string;
@@ -74,7 +75,11 @@ export default function PatientRealtimeLogs({ patientId }: Props) {
                 <span>{format(new Date(log.date), "MMM d")}</span>
                 <span>{log.taken ? "✅ Taken" : "❌ Missed"}</span>
                 {log.proof_photo_url && (
-                  <a href={log.proof_photo_url} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={supabase.storage.from('proof-photos').getPublicUrl(log.proof_photo_url).data.publicUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     📷
                   </a>
                 )}
