@@ -9,23 +9,93 @@ import { Users, Bell, Calendar as CalendarIcon, Mail, AlertTriangle, Check, Cloc
 import NotificationSettings from "./NotificationSettings";
 import { format, subDays, isToday, isBefore, startOfDay } from "date-fns";
 import PatientRealtimeLogs from "./PatientRealtimeLogs";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPatientMedications, fetchPatientMedicationLogsForMonth } from "@/lib/caretakerApi";
 
 const CaretakerDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const patientId = "SOME_USER_ID";
+  const patientId = "b1e2c3d4-5678-90ab-cdef-1234567890ab"; // Example UUID
 
-  // Mock data for demonstration
-  const patientName = "Eleanor Thompson";
-  const adherenceRate = 85;
-  const currentStreak = 5;
-  const missedDoses = 3;
+  // Fetch medications and logs for the patient
+  const year = selectedDate.getFullYear();
+  const month = selectedDate.getMonth() + 1;
+  const lastDay = new Date(year, month, 0).getDate();
+  const start = `${year}-${String(month).padStart(2, "0")}-01`;
+  const end = `${year}-${String(month).padStart(2, "0")}-${String(lastDay).padStart(2, "0")}`;
 
-  // Mock data for taken medications (same as in PatientDashboard)
-  const takenDates = new Set([
-    "2024-06-10", "2024-06-09", "2024-06-07", "2024-06-06", 
-    "2024-06-05", "2024-06-04", "2024-06-02", "2024-06-01"
-  ]);
+  const { data: medications, isLoading: medsLoading } = useQuery({
+    queryKey: ["caretaker_meds", patientId],
+    queryFn: () => fetchPatientMedications(patientId).then(res => res.data || []),
+    enabled: !!patientId,
+  });
+
+  const { data: logsData, isLoading: logsLoading } = useQuery({
+    queryKey: ["caretaker_logs", patientId, start, end],
+    queryFn: () => fetchPatientMedicationLogsForMonth(patientId, start, end).then(res => res.data || []),
+    enabled: !!patientId,
+  });
+
+  // Build logsByDate
+  const logsByDate: Record<string, any[]> = {};
+  if (logsData) {
+    for (const log of logsData) {
+      if (!logsByDate[log.date]) logsByDate[log.date] = [];
+      logsByDate[log.date].push(log);
+    }
+  }
+
+  // Helper: get status for a date
+  function getDayStatus(date: Date) {
+    const dateStr = format(date, "yyyy-MM-dd");
+    const isPast = isBefore(date, startOfDay(new Date()));
+    const isCurrentDay = isToday(date);
+
+    if (!medications || medications.length === 0) return null;
+
+    const logs = logsByDate[dateStr] || [];
+    const takenMedIds = new Set(logs.filter(l => l.taken).map(l => l.medication_id));
+    const allTaken = medications.every(med => takenMedIds.has(med.id));
+    if (allTaken && logs.length > 0) return "taken";
+    if (isPast && !allTaken) return "missed";
+    if (isCurrentDay) return "today";
+    return null;
+  }
+
+  // Calculate adherence for the current month
+  function getAdherencePercentage() {
+    if (!medications || medications.length === 0) return 0;
+    const daysInMonth = new Date(year, month, 0).getDate();
+    let totalDoses = 0;
+    let takenDoses = 0;
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+      totalDoses += medications.length;
+      const logs = logsByDate[dateStr] || [];
+      takenDoses += logs.filter(l => l.taken).length;
+    }
+    return totalDoses === 0 ? 0 : Math.round((takenDoses / totalDoses) * 100);
+  }
+
+  // Loading state
+  if (medsLoading || logsLoading) {
+    return <div className="p-8 text-center text-lg">Loading dashboard...</div>;
+  }
+
+  // Replace all mock stats with real ones:
+  const adherenceRate = getAdherencePercentage();
+  const patientName = "Patient"; // Optionally fetch/display real name
+  const currentStreak = 0; // Optionally implement streak logic
+  const missedDoses = 0; // Optionally implement missed doses logic
+
+  // For calendar, build takenDates set
+  const takenDates = new Set(
+    Object.keys(logsByDate).filter(dateStr => {
+      const logs = logsByDate[dateStr];
+      const takenMedIds = new Set(logs.filter(l => l.taken).map(l => l.medication_id));
+      return medications.every(med => takenMedIds.has(med.id));
+    })
+  );
 
   const recentActivity = [
     { date: "2024-06-10", taken: true, time: "8:30 AM", hasPhoto: true },
