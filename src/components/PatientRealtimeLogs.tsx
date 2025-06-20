@@ -1,4 +1,3 @@
-// src/components/PatientRealtimeLogs.tsx
 import { useEffect, useState, useCallback } from "react";
 import { fetchMedicationLogsForMonth } from "@/lib/medicationLogApi";
 import { useMedicationLogSubscription } from "@/lib/useMedicationLogSubscription";
@@ -15,7 +14,6 @@ export default function PatientRealtimeLogs({ patientId }: Props) {
   const [loading, setLoading] = useState(true);
   
 
-  // Fetch logs for this month
   const fetchLogs = useCallback(async () => {
     setLoading(true);
     const now = new Date();
@@ -32,11 +30,9 @@ export default function PatientRealtimeLogs({ patientId }: Props) {
     fetchLogs();
   }, [fetchLogs]);
 
-  // Subscribe to real-time updates
   useMedicationLogSubscription(patientId, ({ new: newLog, eventType }) => {
     setLogs((prev) => {
       if (eventType === "INSERT" || eventType === "UPDATE") {
-        // Replace or add
         const idx = prev.findIndex(
           (l) => l.medication_id === newLog.medication_id && l.date === newLog.date
         );
@@ -55,7 +51,6 @@ export default function PatientRealtimeLogs({ patientId }: Props) {
     });
   });
 
-  // Calculate adherence
   const total = logs.length;
   const taken = logs.filter((l) => l.taken).length;
   const adherence = total ? Math.round((taken / total) * 100) : 0;

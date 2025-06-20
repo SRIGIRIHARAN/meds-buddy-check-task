@@ -15,9 +15,9 @@ import { fetchPatientMedications, fetchPatientMedicationLogsForMonth } from "@/l
 const CaretakerDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const patientId = "b1e2c3d4-5678-90ab-cdef-1234567890ab"; // Example UUID
+  const patientId = "b1e2c3d4-5678-90ab-cdef-1234567890ab";  
 
-  // Fetch medications and logs for the patient
+ 
   const year = selectedDate.getFullYear();
   const month = selectedDate.getMonth() + 1;
   const lastDay = new Date(year, month, 0).getDate();
@@ -36,7 +36,7 @@ const CaretakerDashboard = () => {
     enabled: !!patientId,
   });
 
-  // Build logsByDate
+ 
   const logsByDate: Record<string, any[]> = {};
   if (logsData) {
     for (const log of logsData) {
@@ -45,7 +45,7 @@ const CaretakerDashboard = () => {
     }
   }
 
-  // Helper: get status for a date
+ 
   function getDayStatus(date: Date) {
     const dateStr = format(date, "yyyy-MM-dd");
     const isPast = isBefore(date, startOfDay(new Date()));
@@ -62,7 +62,7 @@ const CaretakerDashboard = () => {
     return null;
   }
 
-  // Calculate adherence for the current month
+ 
   function getAdherencePercentage() {
     if (!medications || medications.length === 0) return 0;
     const daysInMonth = new Date(year, month, 0).getDate();
@@ -77,18 +77,18 @@ const CaretakerDashboard = () => {
     return totalDoses === 0 ? 0 : Math.round((takenDoses / totalDoses) * 100);
   }
 
-  // Loading state
+ 
   if (medsLoading || logsLoading) {
     return <div className="p-8 text-center text-lg">Loading dashboard...</div>;
   }
 
-  // Replace all mock stats with real ones:
+   
   const adherenceRate = getAdherencePercentage();
-  const patientName = "Patient"; // Optionally fetch/display real name
-  const currentStreak = 0; // Optionally implement streak logic
-  const missedDoses = 0; // Optionally implement missed doses logic
+  const patientName = "Patient";  
+  const currentStreak = 0;  
+  const missedDoses = 0;  
 
-  // For calendar, build takenDates set
+ 
   const takenDates = new Set(
     Object.keys(logsByDate).filter(dateStr => {
       const logs = logsByDate[dateStr];

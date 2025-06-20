@@ -12,11 +12,10 @@ const NotificationSettings = () => {
     emailNotifications: true,
     emailAddress: "caretaker@example.com",
     reminderTime: "20:00",
-    // 8 PM
     pushNotifications: true,
     criticalAlerts: true,
     missedMedNotification: true,
-    missedMedDelay: "2" // hours
+    missedMedDelay: "2" 
   });
   const handleSettingChange = (key: string, value: any) => {
     setSettings(prev => ({
@@ -26,7 +25,6 @@ const NotificationSettings = () => {
   };
   const handleSaveSettings = () => {
     console.log("Notification settings saved:", settings);
-    // Here you would typically save to backend
   };
   return <div className="space-y-6">
       <Card>
@@ -37,7 +35,6 @@ const NotificationSettings = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Email Notifications */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
@@ -59,7 +56,6 @@ const NotificationSettings = () => {
 
           <Separator />
 
-          {/* Missed Medication Alerts */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
@@ -97,17 +93,9 @@ const NotificationSettings = () => {
                 </div>
               </div>}
           </div>
-
-          
-
-          {/* Critical Alerts */}
-          <div className="space-y-4">
-            
-          </div>
         </CardContent>
       </Card>
 
-      {/* Preview Card */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -136,7 +124,6 @@ const NotificationSettings = () => {
         </CardContent>
       </Card>
 
-      {/* Save Button */}
       <div className="flex justify-end">
         <Button onClick={handleSaveSettings} className="bg-green-600 hover:bg-green-700">
           Save Notification Settings

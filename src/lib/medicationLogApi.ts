@@ -44,9 +44,8 @@ export async function fetchMedicationLogsForToday(userId: string, date: string) 
   }
 
   export async function fetchMedicationLogsForMonth(userId: string, year: number, month: number) {
-    // month: 1-based (1=Jan, 12=Dec)
     const start = `${year}-${String(month).padStart(2, "0")}-01`;
-    const endDate = new Date(year, month, 0).getDate(); // last day of month
+    const endDate = new Date(year, month, 0).getDate();  
     const end = `${year}-${String(month).padStart(2, "0")}-${endDate}`;
     return supabase
       .from("medication_logs")

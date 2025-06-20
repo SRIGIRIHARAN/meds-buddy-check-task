@@ -100,7 +100,6 @@ const MedicationTracker = ({ date, isTaken, onMarkTaken, isToday }: MedicationTr
         </CardContent>
       </Card>
 
-      {/* Image Upload Section */}
       <Card className="border-dashed border-2 border-border/50">
         <CardContent className="p-6">
           <div className="text-center">
@@ -143,7 +142,6 @@ const MedicationTracker = ({ date, isTaken, onMarkTaken, isToday }: MedicationTr
         </CardContent>
       </Card>
 
-      {/* Mark as Taken Button */}
       <Button
         onClick={handleMarkTaken}
         className="w-full py-4 text-lg bg-green-600 hover:bg-green-700 text-white"

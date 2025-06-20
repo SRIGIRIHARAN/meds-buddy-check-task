@@ -15,23 +15,20 @@ const PatientDashboard = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const today = new Date();
   const year = selectedDate.getFullYear();
-  const month = selectedDate.getMonth() + 1; // 1-based
+  const month = selectedDate.getMonth() + 1;
 
-  // Fetch all medications for the user
   const { data: medications, isLoading: medsLoading, isError: medsError } = useQuery({
     queryKey: ["medications", user?.id],
     queryFn: () => fetchMedications(user!.id).then(res => res.data || []),
     enabled: !!user,
   });
 
-  // Fetch all logs for the month
   const { data: logsData, isLoading: logsLoading, isError: logsError } = useQuery({
     queryKey: ["medication_logs_month", user?.id, year, month],
     queryFn: () => fetchMedicationLogsForMonth(user!.id, year, month).then(res => res.data || []),
     enabled: !!user,
   });
 
-  // Build a map: date string -> array of logs for that date
   const logsByDate: Record<string, any[]> = {};
   if (logsData) {
     for (const log of logsData) {
@@ -40,7 +37,6 @@ const PatientDashboard = () => {
     }
   }
 
-  // Helper: get status for a date
   function getDayStatus(date: Date) {
     const dateStr = format(date, "yyyy-MM-dd");
     const isPast = isBefore(date, startOfDay(today));
@@ -49,7 +45,6 @@ const PatientDashboard = () => {
     if (!medications || medications.length === 0) return null;
 
     const logs = logsByDate[dateStr] || [];
-    // For each medication, is there a log with taken=true?
     const takenMedIds = new Set(logs.filter(l => l.taken).map(l => l.medication_id));
     const allTaken = medications.every(med => takenMedIds.has(med.id));
     if (allTaken && logs.length > 0) return "taken";
@@ -58,7 +53,6 @@ const PatientDashboard = () => {
     return null;
   }
 
-  // Calculate adherence for the current month
   function getAdherencePercentage() {
     if (!medications || medications.length === 0) return 0;
     const daysInMonth = new Date(year, month, 0).getDate();
@@ -73,7 +67,6 @@ const PatientDashboard = () => {
     return totalDoses === 0 ? 0 : Math.round((takenDoses / totalDoses) * 100);
   }
 
-  // Loading and error states
   if (medsLoading || logsLoading) {
     return <div className="p-8 text-center text-lg">Loading dashboard...</div>;
   }
@@ -83,7 +76,6 @@ const PatientDashboard = () => {
 
   return (
     <div className="space-y-6">
-      {/* Welcome Section */}
       <div className="bg-gradient-to-r from-blue-500 to-green-500 rounded-2xl p-8 text-white">
         <div className="flex items-center gap-4 mb-4">
           <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center">
@@ -113,7 +105,6 @@ const PatientDashboard = () => {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* Calendar */}
         <div className="lg:col-span-1 order-2">
           <Card>
             <CardHeader>
@@ -171,7 +162,6 @@ const PatientDashboard = () => {
             </CardContent>
           </Card>
         </div>
-        {/* Medication Form and List */}
         <div className="lg:col-span-2 order-1 flex flex-col gap-6">
           <MedicationForm />
           <MedicationList />

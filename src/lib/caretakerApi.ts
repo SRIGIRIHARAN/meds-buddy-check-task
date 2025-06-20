@@ -1,4 +1,3 @@
-// src/lib/caretakerApi.ts
 import { supabase } from "./supabaseClient";
 
 export async function fetchPatientsForCaretaker(caretakerId: string) {

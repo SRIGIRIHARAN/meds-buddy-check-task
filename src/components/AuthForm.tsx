@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 
-// Custom font and color classes
 const headingFont = "font-extrabold text-3xl md:text-4xl tracking-tight text-blue-700";
 const subFont = "text-base text-muted-foreground";
 const cardBg = "bg-white/95 shadow-xl rounded-2xl border-0";

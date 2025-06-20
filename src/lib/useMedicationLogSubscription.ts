@@ -1,4 +1,3 @@
-// src/lib/useMedicationLogSubscription.ts
 import { useEffect } from "react";
 import { supabase } from "./supabaseClient";
 import { MedicationLog } from "@/types/medicationLog";
