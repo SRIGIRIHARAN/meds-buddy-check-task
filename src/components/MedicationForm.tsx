@@ -22,18 +22,15 @@ const MedicationForm = () => {
   const [name, setName] = useState("");
   const [dosage, setDosage] = useState("");
   const [frequency, setFrequency] = useState(frequencies[0]);
-  const [loading, setLoading] = useState(false);
 
   const mutation = useMutation({
     mutationFn: async () => {
-      setLoading(true);
       const { error } = await addMedication({
         user_id: user!.id,
         name,
         dosage,
         frequency,
       });
-      setLoading(false);
       if (error) throw error;
     },
     onSuccess: () => {
@@ -70,7 +67,7 @@ const MedicationForm = () => {
               onChange={e => setName(e.target.value)}
               required
               placeholder="e.g. Paracetamol"
-              disabled={loading}
+              disabled={mutation.isPending}
             />
           </div>
           <div>
@@ -81,7 +78,7 @@ const MedicationForm = () => {
               onChange={e => setDosage(e.target.value)}
               required
               placeholder="e.g. 500mg"
-              disabled={loading}
+              disabled={mutation.isPending}
             />
           </div>
           <div>
@@ -91,15 +88,15 @@ const MedicationForm = () => {
               value={frequency}
               onChange={e => setFrequency(e.target.value)}
               className="w-full border rounded-md p-2"
-              disabled={loading}
+              disabled={mutation.isPending}
             >
               {frequencies.map(f => (
                 <option key={f} value={f}>{f}</option>
               ))}
             </select>
           </div>
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Adding..." : "Add Medication"}
+          <Button type="submit" className="w-full" disabled={mutation.isPending}>
+            {mutation.isPending ? "Adding..." : "Add Medication"}
           </Button>
         </form>
       </CardContent>
