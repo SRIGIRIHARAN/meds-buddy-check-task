@@ -42,6 +42,51 @@ A comprehensive medication management application built with React, TypeScript, 
 - Supabase account
 - Git
 
+  # Authentication Flow Instructions for New Users
+
+This section provides step-by-step instructions for new users to authenticate and access the Meds Buddy platform.
+
+## Steps
+
+### 1. Navigate to the Signup Tab
+- Open the platform’s website or application.
+- Locate and click on the "Create an Account" section or "Sign Up" option to start the registration process.
+
+### 2. Enter Credentials
+- In the signup form, enter the following:
+  - **Email**: Provide a valid email address (e.g., you@example.com).
+  - **Password**: Enter a secure password and use the visibility icon (eye) to check it if needed.
+- Ensure all fields are filled correctly.
+
+### 3. Submit the Signup Form
+- Click the "Sign Up" button to submit your registration details.
+- Wait for a confirmation message (e.g., "Check your email for verification").
+
+### 4. Check Your Email for the Confirmation Mail
+- Open your email inbox associated with the provided email address.
+- Look for a verification email from the platform (check spam/junk folder if not found).
+- The email will contain a verification link or button.
+
+### 5. Verify Your Account
+- Click the verification link or button in the email.
+- This will confirm your email and redirect you to the sign-in page or display a success message.
+
+### 6. Navigate to the Sign-In Page
+- If not automatically redirected, click the "Login" link below the signup form or go to the sign-in section.
+
+### 7. Enter Sign-In Credentials
+- Input the same email address and password used during signup.
+- Double-check the credentials for accuracy.
+
+### 8. Access the Platform
+- Click the "Sign In" button on the login page.
+- Upon successful authentication, you will be granted access to the platform to start managing your medications.
+
+## Notes
+- If the verification email doesn’t arrive, request a new one from the platform or check your spam folder.
+- Ensure your password is strong and secure.
+- Contact support if you encounter any issues during the process.
+
 ## Setup Instructions
 
 ### 1. Clone the Repository
