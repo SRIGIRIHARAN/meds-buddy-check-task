@@ -1,5 +1,5 @@
 # Meds Buddy - Medication Management System
-# Live URL - 
+# Live URL - "https://meds-buddy-check-task-16jj.vercel.app/"
 
 A comprehensive medication management application built with React, TypeScript, Vite, and Supabase. The system provides separate dashboards for patients and caretakers to manage medications, track adherence, and monitor medication schedules.
 
