@@ -193,7 +193,7 @@ npm run preview
 
 ## Deployment
 
-### Vercel Deployment
+### Vercel Deployment(I prefer this)
 
 1. Install Vercel CLI: `npm i -g vercel`
 2. Run `vercel` in your project directory
